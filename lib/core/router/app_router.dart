@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/ingredientes/presentation/ingredientes_screen.dart';
 import '../../features/personal/presentation/personal_screen.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 
@@ -49,7 +50,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/ingredientes',
         name: 'ingredientes',
-        builder: (context, state) => const PlaceholderScreen(title: 'Ingredientes'),
+        builder: (context, state) => const IngredientesScreen(),
       ),
       GoRoute(
         path: '/suministros',
