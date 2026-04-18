@@ -15,6 +15,7 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final summary = ref.watch(dashboardProvider);
+    final desglose = ref.watch(desgloseGastosProvider);
     final now = DateTime.now();
     final monthLabel = DateFormat('MMMM yyyy', 'es').format(now);
 
@@ -92,7 +93,16 @@ class DashboardScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+
+              // ── Desglose de gastos ──────────────────────────────────
+              if (summary.totalGastos > 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _DesgloseGastos(desglose: desglose),
+                ),
+
+              const SizedBox(height: 16),
 
               // ── Chart ───────────────────────────────────────────────
               Padding(
@@ -381,6 +391,93 @@ class _ModuleGrid extends StatelessWidget {
         children: _modules
             .map((m) => _ModuleCard(module: m))
             .toList(),
+      ),
+    );
+  }
+}
+
+// ── Desglose de gastos ─────────────────────────────────────────────────────────
+
+class _DesgloseGastos extends StatelessWidget {
+  final Map<String, double> desglose;
+
+  const _DesgloseGastos({required this.desglose});
+
+  static const _colores = {
+    'Personal': AppConstants.primaryGreen,
+    'Ingredientes': Color(0xFF1565C0),
+    'Suministros': Color(0xFF6A1B9A),
+    'Transporte': Color(0xFFE65100),
+  };
+
+  static const _iconos = {
+    'Personal': Icons.people_rounded,
+    'Ingredientes': Icons.kitchen_rounded,
+    'Suministros': Icons.propane_tank_rounded,
+    'Transporte': Icons.local_shipping_rounded,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final fmt = NumberFormat.currency(
+        locale: AppConstants.localeCode,
+        symbol: '${AppConstants.currencySymbol} ',
+        decimalDigits: 0);
+    final total = desglose.values.fold(0.0, (s, v) => s + v);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Desglose de Gastos',
+                style:
+                    TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+            const SizedBox(height: 12),
+            ...desglose.entries.map((e) {
+              final pct = total > 0 ? e.value / total : 0.0;
+              final color = _colores[e.key] ?? Colors.grey;
+              final icon = _iconos[e.key] ?? Icons.circle;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Icon(icon, size: 16, color: color),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 80,
+                      child: Text(e.key,
+                          style: const TextStyle(fontSize: 12)),
+                    ),
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: pct,
+                          minHeight: 8,
+                          backgroundColor: Colors.grey.shade100,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(color),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 64,
+                      child: Text(fmt.format(e.value),
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: color)),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
