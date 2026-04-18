@@ -9,6 +9,7 @@ import '../../features/ingresos/presentation/ingresos_screen.dart';
 import '../../features/personal/presentation/personal_screen.dart';
 import '../../features/suministros/presentation/suministros_screen.dart';
 import '../../features/comensales/presentation/comensales_screen.dart';
+import '../../features/directorio/presentation/directorio_screen.dart';
 import '../../features/transporte/presentation/transporte_screen.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 
@@ -42,6 +43,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/transporte',  name: 'transporte',  builder: (context, state) => const TransporteScreen()),
       GoRoute(path: '/ingresos',    name: 'ingresos',    builder: (context, state) => const IngresosScreen()),
       GoRoute(path: '/comensales',  name: 'comensales',  builder: (context, state) => const ComensalesScreen()),
+      GoRoute(path: '/directorio',  name: 'directorio',  builder: (context, state) => const DirectorioScreen()),
       GoRoute(path: '/reportes',    name: 'reportes',    builder: (context, state) => const PlaceholderScreen(title: 'Reportes')),
     ],
   );

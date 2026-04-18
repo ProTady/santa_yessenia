@@ -8,9 +8,11 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:signature/signature.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../directorio/providers/directorio_provider.dart';
 import '../models/comensal_model.dart';
 import '../providers/comensales_provider.dart';
 import '../providers/costos_provider.dart';
+import 'costos_config_dialog.dart';
 
 class ComensalForm extends ConsumerStatefulWidget {
   final ComensalModel? comensal;
@@ -60,8 +62,16 @@ class _ComensalFormState extends ConsumerState<ComensalForm> {
             ? c.costoExtra.toStringAsFixed(2)
             : costos.costoExtra.toStringAsFixed(2));
 
-    if (_firmaBytes != null) {
-      // ya tiene firma guardada — no necesitamos el controller
+    // Auto-lookup al escribir DNI
+    _dniCtrl.addListener(_autoLookupDni);
+  }
+
+  void _autoLookupDni() {
+    final dni = _dniCtrl.text.trim();
+    if (dni.length != 8) return;
+    final encontrado = ref.read(directorioPorDniProvider(dni));
+    if (encontrado != null && _nombreCtrl.text.isEmpty) {
+      setState(() => _nombreCtrl.text = encontrado.nombre);
     }
   }
 
@@ -329,11 +339,10 @@ class _ComensalFormState extends ConsumerState<ComensalForm> {
               controller: _nombreCtrl,
               textCapitalization: TextCapitalization.words,
               decoration: const InputDecoration(
-                labelText: 'Nombre completo *',
+                labelText: 'Nombre completo',
                 prefixIcon: Icon(Icons.person_outline_rounded),
+                helperText: 'Opcional — se auto-completa si el DNI está en el directorio',
               ),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Ingresa el nombre' : null,
             ),
             const SizedBox(height: 8),
             // Fecha
@@ -394,9 +403,9 @@ class _ComensalFormState extends ConsumerState<ComensalForm> {
 
             const SizedBox(height: 12),
 
-            // Precio seleccionado
+            // Precio seleccionado + botón editar precio
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding: const EdgeInsets.fromLTRB(14, 6, 4, 6),
               decoration: BoxDecoration(
                 color: AppConstants.primaryGreen.withAlpha(15),
                 borderRadius: BorderRadius.circular(10),
@@ -414,6 +423,17 @@ class _ComensalFormState extends ConsumerState<ComensalForm> {
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                           color: AppConstants.primaryGreen)),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    icon: const Icon(Icons.edit_rounded, size: 18),
+                    color: AppConstants.primaryGreen,
+                    tooltip: 'Cambiar precios',
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (_) => const CostosConfigDialog(),
+                    ),
+                  ),
                 ],
               ),
             ),

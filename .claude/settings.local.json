@@ -33,7 +33,21 @@
       "Bash(powershell.exe -NoProfile -Command \"Get-Content 'C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-USER-Proyectos-santa-yessenia\\\\912a3ff0-8fde-4fff-bca1-e8bdb4c09d1e\\\\tasks\\\\bxp71bzod.output' -Tail 60 2>&1 | Out-String\")",
       "Bash(powershell.exe -NoProfile -Command \"Set-Location 'C:\\\\Users\\\\USER\\\\Proyectos\\\\santa_yessenia'; & 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' build apk --release 2>&1 | Out-String\")",
       "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' devices 2>&1 | Out-String\")",
-      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' install -d UCDES4NB6H6LDUSW 2>&1 | Out-String\")"
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' install -d UCDES4NB6H6LDUSW 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\cache\\\\dart-sdk\\\\..\\\\..\\\\..\\\\bin\\\\cache\\\\artifacts\\\\platform-tools\\\\adb.exe' push 'C:\\\\Users\\\\USER\\\\Proyectos\\\\santa_yessenia\\\\build\\\\app\\\\outputs\\\\flutter-apk\\\\app-release.apk' '/sdcard/Download/SantaYessenia.apk' 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe' push 'C:\\\\Users\\\\USER\\\\Proyectos\\\\santa_yessenia\\\\build\\\\app\\\\outputs\\\\flutter-apk\\\\app-release.apk' '/sdcard/Download/SantaYessenia.apk' 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"Set-Location 'C:\\\\Users\\\\USER\\\\Proyectos\\\\santa_yessenia'; & 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' pub get 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' analyze --no-pub 2>&1 | Out-String\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' build apk --release 2>&1 | Out-String\")",
+      "Bash(\"C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\" devices *)",
+      "Bash(\"C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe\" push *)",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe' push 'build\\\\app\\\\outputs\\\\flutter-apk\\\\app-release.apk' '/sdcard/Download/SantaYessenia.apk' 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe' shell ls -lh /sdcard/Download/SantaYessenia.apk 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' install 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' pub get 2>&1 | Out-String\")"
     ]
   }
 }

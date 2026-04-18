@@ -84,7 +84,7 @@ class ComensalesScreen extends ConsumerWidget {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Eliminar comensal'),
-        content: Text('¿Eliminar el registro de ${c.nombre}?'),
+        content: Text('¿Eliminar el registro de ${c.nombre.isNotEmpty ? c.nombre : 'DNI ${c.dni}'}?'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -505,7 +505,10 @@ class _ComensalCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(comensal.nombre,
+                  Text(
+                      comensal.nombre.isNotEmpty
+                          ? comensal.nombre
+                          : 'DNI ${comensal.dni}',
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14)),
                   Text('DNI: ${comensal.dni}',
@@ -595,7 +598,8 @@ class _AdicionalCard extends StatelessWidget {
                 fontWeight: FontWeight.bold, color: Colors.orange),
           ),
         ),
-        title: Text(comensal.nombre,
+        title: Text(
+            comensal.nombre.isNotEmpty ? comensal.nombre : 'DNI ${comensal.dni}',
             style: const TextStyle(fontWeight: FontWeight.w600)),
         subtitle: Text('DNI: ${comensal.dni}',
             style: const TextStyle(fontSize: 12)),

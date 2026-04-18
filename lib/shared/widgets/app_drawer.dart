@@ -128,6 +128,13 @@ class AppDrawer extends ConsumerWidget {
                   currentRoute: route,
                   activeColor: const Color(0xFF00838F),
                 ),
+                _DrawerItem(
+                  icon: Icons.contact_page_rounded,
+                  label: 'Directorio',
+                  route: '/directorio',
+                  currentRoute: route,
+                  activeColor: const Color(0xFF00838F),
+                ),
 
                 const SizedBox(height: 4),
                 const Divider(indent: 16, endIndent: 16),

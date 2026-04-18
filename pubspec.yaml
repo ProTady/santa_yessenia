@@ -41,6 +41,8 @@ dependencies:
   hive_flutter: ^1.1.0
   mobile_scanner: ^6.0.4
   signature: ^5.4.1
+  file_picker: ^8.0.0
+  excel: ^4.0.0
 
 dev_dependencies:
   flutter_test:

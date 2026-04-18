@@ -9,6 +9,7 @@ class AppConstants {
   static const String transporteBox = 'transporte';
   static const String ingresosBox = 'ingresos';
   static const String comensalesBox = 'comensales';
+  static const String directorioBox  = 'directorio';
 
   // Settings keys
   static const String pinKey = 'pin';
