@@ -8,6 +8,7 @@ class AppConstants {
   static const String suministrosBox = 'suministros';
   static const String transporteBox = 'transporte';
   static const String ingresosBox = 'ingresos';
+  static const String comensalesBox = 'comensales';
 
   // Settings keys
   static const String pinKey = 'pin';

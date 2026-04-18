@@ -17,6 +17,7 @@ Future<void> main() async {
     Hive.openBox(AppConstants.suministrosBox),
     Hive.openBox(AppConstants.transporteBox),
     Hive.openBox(AppConstants.ingresosBox),
+    Hive.openBox(AppConstants.comensalesBox),
   ]);
 
   await initializeDateFormatting('es', null);

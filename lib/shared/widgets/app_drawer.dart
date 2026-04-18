@@ -114,6 +114,22 @@ class AppDrawer extends ConsumerWidget {
                 ),
 
                 const SizedBox(height: 4),
+
+                // ── OPERACIONES ───────────────────────────────────
+                _SectionHeader(
+                  label: 'OPERACIONES',
+                  color: Color(0xFF00838F),
+                  icon: Icons.restaurant_menu_rounded,
+                ),
+                _DrawerItem(
+                  icon: Icons.groups_rounded,
+                  label: 'Comensales',
+                  route: '/comensales',
+                  currentRoute: route,
+                  activeColor: const Color(0xFF00838F),
+                ),
+
+                const SizedBox(height: 4),
                 const Divider(indent: 16, endIndent: 16),
 
                 // ── REPORTES ──────────────────────────────────────
