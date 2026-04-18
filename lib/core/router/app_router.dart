@@ -6,6 +6,7 @@ import '../../features/auth/providers/auth_provider.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/ingredientes/presentation/ingredientes_screen.dart';
 import '../../features/personal/presentation/personal_screen.dart';
+import '../../features/suministros/presentation/suministros_screen.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 
 // Bridges Riverpod auth state changes to GoRouter's refreshListenable
@@ -55,7 +56,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/suministros',
         name: 'suministros',
-        builder: (context, state) => const PlaceholderScreen(title: 'Suministros'),
+        builder: (context, state) => const SuministrosScreen(),
       ),
       GoRoute(
         path: '/transporte',
