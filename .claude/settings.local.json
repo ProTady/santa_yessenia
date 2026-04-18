@@ -47,7 +47,9 @@
       "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe' push 'build\\\\app\\\\outputs\\\\flutter-apk\\\\app-release.apk' '/sdcard/Download/SantaYessenia.apk' 2>&1 | Out-String\")",
       "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\Users\\\\USER\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe' shell ls -lh /sdcard/Download/SantaYessenia.apk 2>&1 | Out-String\")",
       "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' install 2>&1 | Out-String\")",
-      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' pub get 2>&1 | Out-String\")"
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' pub get 2>&1 | Out-String\")",
+      "Bash(powershell.exe -NoProfile -Command \"Get-ChildItem -Path 'C:\\\\Users\\\\USER\\\\Proyectos\\\\santa_yessenia\\\\lib' -Recurse -Filter '*.dart' | Select-Object FullName\")",
+      "Bash(powershell.exe -NoProfile -Command \"& 'C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat' analyze --no-pub lib/features/comensales/presentation/comensal_form.dart 2>&1 | Out-String\")"
     ]
   }
 }

@@ -41,7 +41,9 @@ class IngredientesScreen extends ConsumerWidget {
         ],
       ),
       drawer: const AppDrawer(currentRoute: '/ingredientes'),
-      body: lista.isEmpty
+      body: SafeArea(
+        top: false,
+        child: lista.isEmpty
           ? _EmptyState(onAdd: () => _mostrarFormulario(context, ref))
           : Column(
               children: [
@@ -100,6 +102,7 @@ class IngredientesScreen extends ConsumerWidget {
                 ),
               ],
             ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _mostrarFormulario(context, ref),
         icon: const Icon(Icons.add_shopping_cart_rounded),
@@ -113,6 +116,7 @@ class IngredientesScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _IngredienteForm(ingrediente: ing, ref: ref),
     );

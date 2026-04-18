@@ -42,7 +42,9 @@ class _DirectorioScreenState extends ConsumerState<DirectorioScreen> {
         ],
       ),
       drawer: const AppDrawer(currentRoute: '/directorio'),
-      body: Column(
+      body: SafeArea(
+        top: false,
+        child: Column(
         children: [
           // Barra de búsqueda
           Padding(
@@ -100,6 +102,7 @@ class _DirectorioScreenState extends ConsumerState<DirectorioScreen> {
                   ),
           ),
         ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _color,

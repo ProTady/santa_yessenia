@@ -58,7 +58,9 @@ class SuministrosScreen extends ConsumerWidget {
           ),
         ),
         drawer: const AppDrawer(currentRoute: '/suministros'),
-        body: lista.isEmpty
+        body: SafeArea(
+          top: false,
+          child: lista.isEmpty
             ? _EmptyState(onAdd: () => _mostrarFormulario(context, ref))
             : Column(
                 children: [
@@ -98,6 +100,7 @@ class SuministrosScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+          ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _mostrarFormulario(context, ref),
           icon: const Icon(Icons.add_rounded),
@@ -112,6 +115,7 @@ class SuministrosScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _SuministroForm(suministro: s, ref: ref),
     );

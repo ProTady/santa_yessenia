@@ -68,10 +68,12 @@ class _DirectorioFormState extends ConsumerState<DirectorioForm> {
           ),
         ],
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(20),
+      body: SafeArea(
+        top: false,
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(20),
           children: [
             TextFormField(
               controller: _dniCtrl,
@@ -119,6 +121,7 @@ class _DirectorioFormState extends ConsumerState<DirectorioForm> {
               ),
             ),
           ],
+          ),
         ),
       ),
     );

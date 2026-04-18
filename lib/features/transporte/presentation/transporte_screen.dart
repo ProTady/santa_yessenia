@@ -43,7 +43,9 @@ class TransporteScreen extends ConsumerWidget {
         ],
       ),
       drawer: const AppDrawer(currentRoute: '/transporte'),
-      body: lista.isEmpty
+      body: SafeArea(
+        top: false,
+        child: lista.isEmpty
           ? _EmptyState(onAdd: () => _mostrarFormulario(context, ref))
           : Column(
               children: [
@@ -128,6 +130,7 @@ class TransporteScreen extends ConsumerWidget {
                 ),
               ],
             ),
+        ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _mostrarFormulario(context, ref),
         icon: const Icon(Icons.add_rounded),
@@ -142,6 +145,7 @@ class TransporteScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _TransporteForm(transporte: t, ref: ref),
     );

@@ -37,7 +37,9 @@ class ComensalesScreen extends ConsumerWidget {
         ],
       ),
       drawer: const AppDrawer(currentRoute: '/comensales'),
-      body: Column(
+      body: SafeArea(
+        top: false,
+        child: Column(
         children: [
           // ── Selector de fecha ─────────────────────────────────────
           _DateBar(fecha: fecha, fmtFecha: fmtFecha, ref: ref),
@@ -60,6 +62,7 @@ class ComensalesScreen extends ConsumerWidget {
                   ),
           ),
         ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _color,

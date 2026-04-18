@@ -285,9 +285,11 @@ class _ComensalFormState extends ConsumerState<ComensalForm> {
           ),
         ],
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
+      body: SafeArea(
+        top: false,
+        child: Form(
+          key: _formKey,
+          child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             // ── DNI ─────────────────────────────────────────────────
@@ -579,6 +581,7 @@ class _ComensalFormState extends ConsumerState<ComensalForm> {
           ],
         ),
       ),
+        ),
     );
   }
 }

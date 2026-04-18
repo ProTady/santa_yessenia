@@ -36,7 +36,9 @@ class PersonalScreen extends ConsumerWidget {
         ],
       ),
       drawer: const AppDrawer(currentRoute: '/personal'),
-      body: lista.isEmpty
+      body: SafeArea(
+        top: false,
+        child: lista.isEmpty
           ? _EmptyState(onAdd: () => _mostrarFormulario(context, ref))
           : Column(
               children: [
@@ -61,6 +63,7 @@ class PersonalScreen extends ConsumerWidget {
                 ),
               ],
             ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _mostrarFormulario(context, ref),
         icon: const Icon(Icons.person_add_rounded),
@@ -74,6 +77,7 @@ class PersonalScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _PersonalForm(persona: persona, ref: ref),
     );

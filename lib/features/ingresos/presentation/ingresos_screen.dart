@@ -43,7 +43,9 @@ class IngresosScreen extends ConsumerWidget {
         ],
       ),
       drawer: const AppDrawer(currentRoute: '/ingresos'),
-      body: lista.isEmpty
+      body: SafeArea(
+        top: false,
+        child: lista.isEmpty
           ? _EmptyState(onAdd: () => _mostrarFormulario(context, ref))
           : Column(
               children: [
@@ -132,6 +134,7 @@ class IngresosScreen extends ConsumerWidget {
                 ),
               ],
             ),
+        ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _mostrarFormulario(context, ref),
         icon: const Icon(Icons.add_rounded),
@@ -146,6 +149,7 @@ class IngresosScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _IngresoForm(ingreso: ingreso, ref: ref),
     );
