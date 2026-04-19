@@ -1,4 +1,4 @@
-package com.example.santa_yessenia
+package com.protady.santa_yessenia
 
 import io.flutter.embedding.android.FlutterActivity
 
