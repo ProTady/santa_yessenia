@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../asistencias/providers/liquidacion_provider.dart';
 import '../../ingredientes/providers/ingredientes_provider.dart';
 import '../../ingresos/providers/ingresos_provider.dart';
 import '../../personal/providers/personal_provider.dart';
@@ -13,7 +14,12 @@ final dashboardProvider = Provider<DashboardSummary>((ref) {
   final totalIngresos = ref.watch(totalIngresosMesProvider);
 
   // ── Gastos del mes ──────────────────────────────────────────────────
-  final gastoPersonal = ref.watch(gastoPersonalMensualProvider);
+  // Si hay asistencias registradas en el mes → usa el costo real
+  // Si no hay asistencias → usa estimado (sueldo × 26 días)
+  final tieneAsist = ref.watch(tieneAsistenciasMesProvider);
+  final gastoPersonal = tieneAsist
+      ? ref.watch(gastoPersonalRealMesProvider)
+      : ref.watch(gastoPersonalMensualProvider);
   final gastoIngredientes = ref.watch(gastoIngredientesMesProvider);
   final gastoSuministros = ref.watch(gastoSuministrosMesProvider);
   final gastoTransporte = ref.watch(gastoTransporteMesProvider);
@@ -62,8 +68,11 @@ final dashboardProvider = Provider<DashboardSummary>((ref) {
 
 // Desglose de gastos para el dashboard
 final desgloseGastosProvider = Provider<Map<String, double>>((ref) {
+  final conAsist = ref.watch(tieneAsistenciasMesProvider);
   return {
-    'Personal': ref.watch(gastoPersonalMensualProvider),
+    'Personal': conAsist
+        ? ref.watch(gastoPersonalRealMesProvider)
+        : ref.watch(gastoPersonalMensualProvider),
     'Ingredientes': ref.watch(gastoIngredientesMesProvider),
     'Suministros': ref.watch(gastoSuministrosMesProvider),
     'Transporte': ref.watch(gastoTransporteMesProvider),

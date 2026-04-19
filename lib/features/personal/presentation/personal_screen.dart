@@ -204,6 +204,26 @@ class _PersonalCard extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.grey.shade600, fontSize: 13),
                       ),
+                      const SizedBox(height: 2),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: persona.regimen == Regimen.general
+                              ? const Color(0xFF1A237E).withAlpha(20)
+                              : Colors.orange.withAlpha(20),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          persona.regimen.label,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: persona.regimen == Regimen.general
+                                ? const Color(0xFF1A237E)
+                                : Colors.orange.shade800,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -363,6 +383,7 @@ class _PersonalFormState extends State<_PersonalForm> {
   late final TextEditingController _cargoCtrl;
   late final TextEditingController _sueldoCtrl;
   bool _guardando = false;
+  late Regimen _regimen;
 
   bool get _esEdicion => widget.persona != null;
 
@@ -373,6 +394,7 @@ class _PersonalFormState extends State<_PersonalForm> {
     _cargoCtrl = TextEditingController(text: widget.persona?.cargo ?? '');
     _sueldoCtrl = TextEditingController(
         text: widget.persona?.sueldoDiario.toStringAsFixed(2) ?? '');
+    _regimen = widget.persona?.regimen ?? Regimen.eventual;
   }
 
   @override
@@ -395,6 +417,7 @@ class _PersonalFormState extends State<_PersonalForm> {
         nombre: _nombreCtrl.text.trim(),
         cargo: _cargoCtrl.text.trim(),
         sueldoDiario: sueldo,
+        regimen: _regimen,
       ));
     } else {
       await notifier.agregar(PersonalModel(
@@ -402,6 +425,7 @@ class _PersonalFormState extends State<_PersonalForm> {
         nombre: _nombreCtrl.text.trim(),
         cargo: _cargoCtrl.text.trim(),
         sueldoDiario: sueldo,
+        regimen: _regimen,
       ));
     }
 
@@ -411,9 +435,10 @@ class _PersonalFormState extends State<_PersonalForm> {
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final navBar = MediaQuery.of(context).viewPadding.bottom;
 
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + bottom),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + bottom + navBar),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -468,6 +493,33 @@ class _PersonalFormState extends State<_PersonalForm> {
               ),
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? 'Ingresa el cargo' : null,
+            ),
+            const SizedBox(height: 14),
+
+            // Régimen laboral
+            const SizedBox(height: 14),
+            const Text('Régimen laboral',
+                style: TextStyle(fontSize: 13, color: Colors.black54)),
+            const SizedBox(height: 8),
+            SegmentedButton<Regimen>(
+              segments: const [
+                ButtonSegment(
+                  value: Regimen.eventual,
+                  label: Text('Eventual'),
+                  icon: Icon(Icons.person_outline_rounded, size: 16),
+                ),
+                ButtonSegment(
+                  value: Regimen.general,
+                  label: Text('Régimen General'),
+                  icon: Icon(Icons.shield_outlined, size: 16),
+                ),
+              ],
+              selected: {_regimen},
+              onSelectionChanged: (s) => setState(() => _regimen = s.first),
+              style: SegmentedButton.styleFrom(
+                selectedBackgroundColor: AppConstants.primaryGreen,
+                selectedForegroundColor: Colors.white,
+              ),
             ),
             const SizedBox(height: 14),
 

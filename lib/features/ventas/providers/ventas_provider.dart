@@ -4,14 +4,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/supabase/sync_service.dart';
 import '../../../core/wifi_sync/wifi_events.dart';
-import '../models/suministro_model.dart';
+import '../models/venta_model.dart';
 
-class SuministrosNotifier extends Notifier<List<SuministroModel>> {
-  Box get _box => Hive.box(AppConstants.suministrosBox);
-  static const _table = 'suministros';
+class VentasNotifier extends Notifier<List<VentaModel>> {
+  Box get _box => Hive.box(AppConstants.ventasBox);
+  static const _table = 'ventas';
 
   @override
-  List<SuministroModel> build() {
+  List<VentaModel> build() {
     final channel = SyncService.subscribe(_table, _pullFromSupabase);
     ref.onDispose(() => Supabase.instance.client.removeChannel(channel));
     final wifiSub = WifiEvents.tableUpdated
@@ -22,10 +22,10 @@ class SuministrosNotifier extends Notifier<List<SuministroModel>> {
     return _cargar();
   }
 
-  List<SuministroModel> _cargar() {
+  List<VentaModel> _cargar() {
     return _box.values
         .whereType<Map>()
-        .map((m) => SuministroModel.fromMap(m))
+        .map((m) => VentaModel.fromMap(m))
         .toList()
       ..sort((a, b) => b.fecha.compareTo(a.fecha));
   }
@@ -33,8 +33,10 @@ class SuministrosNotifier extends Notifier<List<SuministroModel>> {
   Future<void> _pullFromSupabase() async {
     final rows = await SyncService.pull(_table);
     if (rows.isEmpty) {
-      final local = _box.values.whereType<Map>()
-          .map((m) => Map<String, dynamic>.from(m)).toList();
+      final local = _box.values
+          .whereType<Map>()
+          .map((m) => Map<String, dynamic>.from(m))
+          .toList();
       SyncService.pushAll(_table, local);
       return;
     }
@@ -48,16 +50,16 @@ class SuministrosNotifier extends Notifier<List<SuministroModel>> {
     state = _cargar();
   }
 
-  Future<void> agregar(SuministroModel s) async {
-    await _box.put(s.id, s.toMap());
+  Future<void> agregar(VentaModel v) async {
+    await _box.put(v.id, v.toMap());
     state = _cargar();
-    SyncService.upsert(_table, s.toMap());
+    SyncService.upsert(_table, v.toMap());
   }
 
-  Future<void> actualizar(SuministroModel s) async {
-    await _box.put(s.id, s.toMap());
+  Future<void> actualizar(VentaModel v) async {
+    await _box.put(v.id, v.toMap());
     state = _cargar();
-    SyncService.upsert(_table, s.toMap());
+    SyncService.upsert(_table, v.toMap());
   }
 
   Future<void> eliminar(String id) async {
@@ -67,26 +69,34 @@ class SuministrosNotifier extends Notifier<List<SuministroModel>> {
   }
 }
 
-final suministrosProvider =
-    NotifierProvider<SuministrosNotifier, List<SuministroModel>>(
-        SuministrosNotifier.new);
+final ventasProvider =
+    NotifierProvider<VentasNotifier, List<VentaModel>>(VentasNotifier.new);
 
-final gastoSuministrosMesProvider = Provider<double>((ref) {
+// ── Derived providers ──────────────────────────────────────────────────────────
+
+final totalVentasMesProvider = Provider<double>((ref) {
   final now = DateTime.now();
   final primerDia = DateTime(now.year, now.month, 1);
-  return ref.watch(suministrosProvider).fold(0.0, (sum, s) {
-    if (!s.fecha.isBefore(primerDia)) return sum + s.costo;
+  return ref.watch(ventasProvider).fold(0.0, (sum, v) {
+    if (!v.fecha.isBefore(primerDia)) return sum + v.total;
     return sum;
   });
 });
 
-final gastoFijoMesProvider = Provider<double>((ref) {
+final totalFiadoMesProvider = Provider<double>((ref) {
   final now = DateTime.now();
   final primerDia = DateTime(now.year, now.month, 1);
-  return ref.watch(suministrosProvider).fold(0.0, (sum, s) {
-    if (!s.fecha.isBefore(primerDia) && s.tipo == TipoSuministro.fijo) {
-      return sum + s.costo;
+  return ref.watch(ventasProvider).fold(0.0, (sum, v) {
+    if (!v.fecha.isBefore(primerDia) && v.estadoPago == EstadoPago.fiado) {
+      return sum + v.total;
     }
     return sum;
+  });
+});
+
+/// Total de ventas pendientes (fiado) de todos los tiempos
+final totalFiadoPendienteProvider = Provider<double>((ref) {
+  return ref.watch(ventasProvider).fold(0.0, (sum, v) {
+    return v.estadoPago == EstadoPago.fiado ? sum + v.total : sum;
   });
 });

@@ -1,17 +1,35 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import '../../../core/constants/app_constants.dart';
+import '../../../features/usuarios/models/usuario_model.dart';
 
 class AuthState {
   final bool isAuthenticated;
   final String? error;
+  final UsuarioApp? usuarioActual;
 
-  const AuthState({this.isAuthenticated = false, this.error});
+  const AuthState({
+    this.isAuthenticated = false,
+    this.error,
+    this.usuarioActual,
+  });
 
-  AuthState copyWith({bool? isAuthenticated, String? error, bool clearError = false}) {
+  bool get esAdmin =>
+      usuarioActual == null || usuarioActual!.esAdmin;
+
+  bool tieneAcceso(String ruta) =>
+      esAdmin || (usuarioActual?.tieneAcceso(ruta) ?? false);
+
+  AuthState copyWith({
+    bool? isAuthenticated,
+    String? error,
+    UsuarioApp? usuarioActual,
+    bool clearError = false,
+    bool clearUsuario = false,
+  }) {
     return AuthState(
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       error: clearError ? null : (error ?? this.error),
+      usuarioActual:
+          clearUsuario ? null : (usuarioActual ?? this.usuarioActual),
     );
   }
 }
@@ -20,12 +38,13 @@ class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() => const AuthState();
 
-  bool verifyPin(String pin) {
-    final box = Hive.box(AppConstants.settingsBox);
-    final stored =
-        box.get(AppConstants.pinKey, defaultValue: AppConstants.defaultPin) as String;
-    if (pin == stored) {
-      state = state.copyWith(isAuthenticated: true, clearError: true);
+  /// Login con un usuario específico y su PIN
+  bool login(UsuarioApp usuario, String pin) {
+    if (pin == usuario.pin) {
+      state = AuthState(
+        isAuthenticated: true,
+        usuarioActual: usuario,
+      );
       return true;
     }
     state = state.copyWith(error: 'PIN incorrecto. Inténtalo de nuevo.');
@@ -34,12 +53,8 @@ class AuthNotifier extends Notifier<AuthState> {
 
   void clearError() => state = state.copyWith(clearError: true);
 
-  Future<void> changePin(String newPin) async {
-    final box = Hive.box(AppConstants.settingsBox);
-    await box.put(AppConstants.pinKey, newPin);
-  }
-
   void logout() => state = const AuthState();
 }
 
-final authProvider = NotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);
+final authProvider =
+    NotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);

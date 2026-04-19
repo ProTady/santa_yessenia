@@ -1,0 +1,294 @@
+================================================================================
+        COTIZACIÓN — APP SANTA YESSENIA (Sistema de Gestión de Alimentación)
+================================================================================
+Fecha         : Abril 2026
+Cliente       : Santa Yessenia — Servicio de Alimentación / Fundo Agrícola
+Plataforma    : Android (Flutter) — Offline First
+Tecnologías   : Flutter 3.41 · Dart 3.11 · Riverpod 3 · Hive · Supabase · GoRouter
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 1. RESUMEN EJECUTIVO
+────────────────────────────────────────────────────────────────────────────────
+
+Aplicación móvil Android empresarial desarrollada a medida para la gestión
+integral de un servicio de alimentación en campo (fundo agrícola). Incluye
+control de gastos, ingresos, ventas, personal, asistencias, planilla con
+beneficios sociales y sincronización multi-dispositivo en tiempo real —
+tanto vía internet (Supabase) como en red local WiFi sin internet.
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 2. MÓDULOS IMPLEMENTADOS
+────────────────────────────────────────────────────────────────────────────────
+
+ INFRAESTRUCTURA Y ARQUITECTURA
+ ─────────────────────────────
+ • Arquitectura Offline-First: datos siempre disponibles sin internet (Hive)
+ • Sincronización automática con Supabase (base de datos en la nube)
+ • Real-time sync: cambios de otros dispositivos se reflejan al instante
+ • Sistema de navegación con GoRouter + redirección según autenticación
+ • Tema visual corporativo (verde institucional, tipografía, iconografía)
+ • Safe Area universal: botones nunca tapados por la barra del sistema
+ • Scroll habilitado en todos los formularios
+
+ AUTENTICACIÓN Y USUARIOS
+ ───────────────────────
+ • Login con selección de usuario + PIN de 4 dígitos
+ • Animación de error (shake) al PIN incorrecto
+ • Dos roles: Administrador (acceso total) y Usuario (acceso por módulos)
+ • CRUD completo de usuarios: crear, editar, eliminar
+ • Permisos granulares por módulo (checkbox por sección)
+ • Admin siempre disponible con PIN configurable
+ • Sincronización de usuarios vía WiFi desde pantalla de login (sin necesidad
+   de iniciar sesión para obtener los usuarios del admin)
+
+ MÓDULO PERSONAL                                                         6 h
+ ─────────────
+ • Registro de trabajadores: nombre, cargo, sueldo diario, régimen laboral
+ • Régimen General (con beneficios) y Eventual (sin beneficios)
+ • CRUD completo con formulario modal
+
+ MÓDULO INGREDIENTES                                                      5 h
+ ──────────────────
+ • Registro de compras de ingredientes: fecha, descripción, precio, cantidad
+ • Agrupación por fecha
+ • Total mensual en banner
+ • CRUD completo
+
+ MÓDULO SUMINISTROS                                                       5 h
+ ─────────────────
+ • Registro de gastos en gas, agua, electricidad, otros insumos
+ • CRUD completo con selector de fecha
+
+ MÓDULO TRANSPORTE                                                        5 h
+ ─────────────────
+ • Registro de fletes, combustible, mantenimiento vehicular
+ • CRUD con fecha y descripción
+
+ MÓDULO INGRESOS DEL FUNDO                                               5 h
+ ─────────────────────────
+ • Registro de cobros al fundo (servicios de alimentación prestados)
+ • Campo de número de boleta/referencia
+ • Total mensual en tiempo real
+
+ MÓDULO VENTAS                                                            8 h
+ ─────────────
+ • Registro de ventas con: fecha · descripción · cantidad · precio unitario
+ • Comprador (campo opcional)
+ • Estado de pago: PAGADO o FIADO (con indicadores visuales diferenciados)
+ • Cálculo automático del total (cantidad × precio) mientras se escribe
+ • Tarjetas resumen: ventas del mes y total fiado pendiente acumulado
+ • Agrupación por fecha
+
+ MÓDULO COMENSALES                                                       14 h
+ ─────────────────
+ • Registro diario de comensales con escaneo de DNI (cámara)
+ • Firma digital en pantalla
+ • Platos: Normal, Extra, Sin plato
+ • Precio configurable por tipo de plato
+ • Navegación por fecha
+ • Resumen del día: cantidad de comensales y total facturado
+ • Configuración de costos de platos (dialog admin)
+
+ MÓDULO DIRECTORIO                                                        5 h
+ ─────────────────
+ • Registro de comensales habituales (DNI + nombre)
+ • Búsqueda y gestión de la nómina de comensales
+
+ MÓDULO ASISTENCIAS                                                      10 h
+ ──────────────────
+ • Marcación diaria de asistencia por trabajador
+ • 4 estados: Presente (1.0) · Medio día (0.5) · Falta (0.0) · Descanso
+ • Navegación por fechas (anterior/siguiente)
+ • Botón "Todos presentes" para agilizar el marcado
+ • Resumen visual por trabajador con íconos por estado
+ • Sincronización en tiempo real
+
+ MÓDULO LIQUIDACIÓN / PLANILLA                                           10 h
+ ────────────────────────────────
+ • Cálculo de planilla por período (rango de fechas)
+ • Sueldo real basado en días trabajados y fracciones (½ día)
+ • Régimen General: aplica Gratificación, CTS, Vacaciones, EsSalud
+ • Régimen Eventual: pago simple sin beneficios
+ • Tasas configurables (porque cambian por ley):
+     - Gratificación: 16.67%
+     - CTS:           9.72%
+     - Vacaciones:    8.33%
+     - EsSalud:       9.00%
+ • Desglose por trabajador con ExpansionTile
+ • Diálogo de edición de tasas integrado en la pantalla
+
+ DASHBOARD                                                                9 h
+ ─────────
+ • Resumen financiero del mes en curso
+ • Total de gastos desagregado: personal, ingredientes, suministros,
+   transporte + comparación con ingresos y ventas
+ • Gráfico de barras comparativo (fl_chart)
+ • Costo de personal: real (desde asistencias) o estimado (26 días)
+   según si hay asistencias registradas en el mes
+ • Indicador de rentabilidad del período
+
+ SINCRONIZACIÓN SUPABASE (Nube)                                          10 h
+ ──────────────────────────────
+ • Todas las tablas sincronizadas: personal, ingredientes, suministros,
+   transporte, ingresos, ventas, comensales, directorio, asistencias, usuarios
+ • Real-time subscriptions: actualizaciones instantáneas entre dispositivos
+ • Auto-push: si Supabase está vacío y hay datos locales, los sube automáticamente
+ • Timeout por fila (10s) para evitar bloqueos
+ • Timeout en lectura (15s) para evitar cuelgues en sync manual
+ • Botón de sincronización manual para admin
+
+ SINCRONIZACIÓN WiFi LOCAL (P2P — Sin internet)                          14 h
+ ──────────────────────────────────────────────
+ • Servidor HTTP integrado en el dispositivo Admin (puerto 8765)
+ • Clientes (usuarios) se conectan al Admin por IP en la misma red WiFi
+ • Admin: toggle ON/OFF desde el menú lateral, muestra IP en tiempo real
+   con botón copiar al portapapeles
+ • Usuario: pantalla de conexión con verificación de ping, lista de módulos
+   a sincronizar, push de datos locales al Admin + pull de datos del Admin
+ • Actualización automática de pantallas del Admin cuando recibe datos push
+   (sistema de eventos WifiEvents reactivo, sin polling)
+ • Sincronización de usuarios desde la pantalla de LOGIN (antes de entrar)
+   para que dispositivos nuevos obtengan los usuarios del Admin
+ • Permisos respetados: usuarios solo sincronizan sus módulos habilitados
+
+ MENÚ LATERAL (DRAWER)                                                    6 h
+ ─────────────────────
+ • Filtrado dinámico: cada usuario solo ve los módulos que tiene permitidos
+ • Secciones: GASTOS · INGRESOS · OPERACIONES · RRHH · ADMINISTRACIÓN
+ • Cabecera con nombre y rol del usuario actual
+ • Botón de servidor WiFi con switch en línea (admin)
+ • Botón sincronización Supabase (admin)
+ • Botón sincronización WiFi (usuario)
+ • Cerrar sesión con SafeArea (no tapado por barra del sistema)
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 3. DETALLE DE HORAS POR COMPONENTE
+────────────────────────────────────────────────────────────────────────────────
+
+ Componente                                                 Horas estimadas
+ ─────────────────────────────────────────────────────────────────────────
+ Arquitectura base + configuración inicial                        10 h
+ Autenticación + sistema de usuarios con permisos                 12 h
+ Módulo Personal                                                   6 h
+ Módulo Ingredientes                                               5 h
+ Módulo Suministros                                                5 h
+ Módulo Transporte                                                 5 h
+ Módulo Ingresos del Fundo                                         5 h
+ Módulo Ventas (pagado/fiado)                                      8 h
+ Módulo Comensales (escáner DNI + firma)                          14 h
+ Módulo Directorio                                                 5 h
+ Módulo Asistencias                                               10 h
+ Módulo Liquidación / Planilla                                    10 h
+ Dashboard con gráficos                                            9 h
+ Sincronizador Supabase (todas las tablas + real-time)            10 h
+ Sincronizador WiFi P2P (servidor + cliente + eventos)            14 h
+ Menú lateral con permisos dinámicos                               6 h
+ UI/UX (Safe Area, scroll, animaciones, formularios)               6 h
+ Correcciones, ajustes iterativos y pruebas                       10 h
+ ─────────────────────────────────────────────────────────────────────
+ TOTAL                                                           160 h
+ ─────────────────────────────────────────────────────────────────────
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 4. COTIZACIÓN ECONÓMICA
+────────────────────────────────────────────────────────────────────────────────
+
+ OPCIÓN A — TARIFA ECONÓMICA (perfil junior-mid, Perú)
+ ─────────────────────────────────────────────────────
+   160 horas × S/. 35 / hora = S/. 5,600
+   Equivalente aproximado: USD 1,493
+
+ OPCIÓN B — TARIFA ESTÁNDAR (perfil mid-level, mercado nacional)
+ ───────────────────────────────────────────────────────────────
+   160 horas × S/. 60 / hora = S/. 9,600
+   Equivalente aproximado: USD 2,560
+
+ OPCIÓN C — TARIFA PREMIUM (perfil senior / agencia)
+ ────────────────────────────────────────────────────
+   160 horas × S/. 100 / hora = S/. 16,000
+   Equivalente aproximado: USD 4,267
+
+ Tipo de cambio referencial: 1 USD = S/. 3.75
+
+ PRECIO FIJO RECOMENDADO (proyecto cerrado, sin soporte)
+ ───────────────────────────────────────────────────────
+   S/. 8,500 — S/. 12,000
+   USD 2,267 — USD 3,200
+
+ Nota: El precio fijo es recomendable para proyectos con alcance definido.
+ Incluye todo lo listado en la sección 2. No incluye mantenimiento posterior.
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 5. COSTOS OPERATIVOS MENSUALES (EXTERNOS)
+────────────────────────────────────────────────────────────────────────────────
+
+ Supabase (base de datos en la nube)
+   Plan Free (hasta 500 MB, proyectos pequeños)      : S/.   0 / mes
+   Plan Pro (si crece la data, más rendimiento)      : S/.  75 / mes
+                                                        (USD 20 / mes)
+
+ Google Play Store (publicación Android)
+   Tarifa única de registro de cuenta               : USD  25  (una sola vez)
+
+ Apple App Store (si se requiere iOS en el futuro)
+   Membresía anual                                   : USD  99 / año
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 6. LO QUE NO ESTÁ INCLUIDO (fuera de alcance)
+────────────────────────────────────────────────────────────────────────────────
+
+ • Versión iOS (requiere Mac + cuenta Apple Developer)
+ • Panel web de administración
+ • Reportes PDF/Excel (paquetes instalados pero pantalla pendiente)
+ • Notificaciones push
+ • Soporte y mantenimiento post-entrega
+ • Capacitación presencial al equipo
+ • Publicación en Play Store
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 7. STACK TÉCNICO (referencia)
+────────────────────────────────────────────────────────────────────────────────
+
+ Framework      : Flutter 3.41.7 / Dart 3.11.5
+ Estado         : Riverpod 3.x (Notifier + NotifierProvider)
+ Almacenamiento : Hive Flutter (offline-first, cero configuración)
+ Nube           : Supabase (PostgreSQL + Real-time + REST API)
+ Navegación     : GoRouter 17.x (rutas con guards de autenticación/permiso)
+ Gráficos       : fl_chart
+ Escáner        : mobile_scanner (DNI por cámara)
+ Firma digital  : signature
+ Sincronización : dart:io HttpServer (WiFi P2P) + Supabase real-time
+ Localización   : es_PE (formato Soles, fechas en español)
+
+
+────────────────────────────────────────────────────────────────────────────────
+ 8. OBSERVACIONES FINALES
+────────────────────────────────────────────────────────────────────────────────
+
+ • La app funciona 100% offline. Los datos se guardan localmente y se
+   sincronizan cuando hay conexión o cuando el admin activa el servidor WiFi.
+
+ • El sincronizador WiFi P2P es una característica avanzada poco común en
+   apps de este rango de precio. Permite que dispositivos sin internet se
+   sincronicen entre sí en el campo.
+
+ • El sistema de permisos por módulo permite que diferentes personas del
+   equipo (almacenero, cocinero, administrador) vean solo lo que les
+   corresponde.
+
+ • El cálculo de planilla respeta el Régimen General peruano con tasas
+   editables directamente desde la app, anticipando cambios en la ley.
+
+================================================================================
+ Documento generado: Abril 2026
+ Proyecto: Santa Yessenia — App de Gestión de Alimentación
+ Repositorio: https://github.com/ProTady/santa_yessenia
+================================================================================

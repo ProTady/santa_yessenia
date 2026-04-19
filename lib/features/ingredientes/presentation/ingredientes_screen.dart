@@ -427,10 +427,11 @@ class _IngredienteFormState extends State<_IngredienteForm> {
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final navBar = MediaQuery.of(context).viewPadding.bottom;
     final fmtFecha = DateFormat('dd/MM/yyyy', 'es');
 
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + bottom),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + bottom + navBar),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),

@@ -43,6 +43,7 @@ dependencies:
   signature: ^5.4.1
   file_picker: ^8.0.0
   excel: ^4.0.0
+  supabase_flutter: ^2.8.0
 
 dev_dependencies:
   flutter_test:

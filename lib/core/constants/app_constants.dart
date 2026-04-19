@@ -9,7 +9,23 @@ class AppConstants {
   static const String transporteBox = 'transporte';
   static const String ingresosBox = 'ingresos';
   static const String comensalesBox = 'comensales';
-  static const String directorioBox  = 'directorio';
+  static const String directorioBox   = 'directorio';
+  static const String asistenciasBox  = 'asistencias';
+  static const String usuariosBox     = 'usuarios';
+  static const String ventasBox       = 'ventas';
+
+  // Módulos disponibles para asignar permisos
+  static const Map<String, String> modulosDisponibles = {
+    '/personal':    'Personal',
+    '/ingredientes':'Ingredientes',
+    '/suministros': 'Suministros',
+    '/transporte':  'Transporte',
+    '/ingresos':    'Ingresos',
+    '/comensales':  'Comensales',
+    '/directorio':  'Directorio',
+    '/asistencias': 'Asistencias',
+    '/ventas':      'Ventas',
+  };
 
   // Settings keys
   static const String pinKey = 'pin';
@@ -24,6 +40,7 @@ class AppConstants {
   static const Color errorRed = Color(0xFFC62828);
   static const Color incomeColor = Color(0xFF2E7D32);
   static const Color expenseColor = Color(0xFFC62828);
+  static const Color asistenciaColor = Color(0xFF283593); // indigo
 
   // App info
   static const String appName = 'Santa Yessenia';
